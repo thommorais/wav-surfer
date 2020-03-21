@@ -1,5 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import Files from './Files'
+import Notification from './components/Notification'
+import Stars from './components/stars'
+import Logo from './components/Logo'
+import Queue from './components/Queue'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import store from './store'
+import { Provider } from 'react-redux'
+
+ReactDOM.render(<>
+    <Provider store={store}>
+        <Stars />
+        <section className="w-full h-full flex flex-col items-center justify-center relative">
+            <Logo />
+            <Files />
+            <Queue />
+        </section>
+        <Notification />
+    </Provider>
+</>, document.getElementById('root'));
