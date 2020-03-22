@@ -4,13 +4,14 @@
   "private": true,
   "homepage": "./",
   "license": "MIT",
-  "main": "public/electron.js",
+  "main": "electron/electron.js",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "dataurl": "^0.1.0",
     "electron-is-dev": "^1.1.0",
+    "ffmpeg-static": "^4.0.1",
     "fluent-ffmpeg": "^2.1.2",
     "node-bufferstream": "^0.1.1",
     "node-sass": "^4.13.1",
@@ -44,7 +45,8 @@
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "release": "np",
-    "dist": "concurrently \"yarn build:css\" \"BROWSER=none yarn build\" \"electron-builder --macos\""
+    "dist": "concurrently \"yarn build:css\" \"BROWSER=none yarn build\" \"electron-builder --macos\"",
+    "build-e": "electron-builder --macos"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -97,7 +99,7 @@
     },
     "files": [
       "build/**/*",
-      "public/electron.js",
+      "electron/electron.js",
       "node_modules/**/*"
     ],
     "directories": {

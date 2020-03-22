@@ -80,7 +80,7 @@ function QueueItem({ file }) {
             })
 
             requestIdleCallback(() => {
-                convertToMp3({ song, onProgress: handleProgress, err })
+                convertToMp3({ file: song, onProgress: handleProgress, err })
                 dispatchProgress(
                     actionsQueue.updateStatus({ song, status: 'processing' })
                 )
@@ -92,7 +92,7 @@ function QueueItem({ file }) {
         <li className="px-12 relative py-3 text-sm leading-5">
             <div className="flex justify-between items-center">
                 <span className="text-white text-xs opacity-25 capitalize">
-                    {fileName.replace(/[\[\]-]+/g, ' ')}
+                    {fileName.replace(/[[\]-]+/g, ' ')}
                 </span>
             </div>
             <div

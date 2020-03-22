@@ -1,55 +1,45 @@
+import ffmpeg from 'fluent-ffmpeg'
+import fs from 'fs'
+import path from 'path'
 
-import ffmpeg  from 'fluent-ffmpeg'
-import fs  from 'fs'
-import path  from 'path'
-import os from 'os'
-
-
-const platform = os.platform()
-
-let ffmpegPath = './bin/darwin-ffmpeg'
-
-if(platform === 'win64'){
-    ffmpegPath = './bin/win64-ffmpeg.exe'
-}
-
-if(platform === 'win32'){
-    ffmpegPath = './bin/win32-ffmpeg.exe'
-}
+const ffmpegBasePath = './node_modules/ffmpeg-static/ffmpeg'
 
 // Setting ffmpeg path to ffmpeg binary for osx so that ffmpeg can be packaged with the app.
-ffmpeg.setFfmpegPath(ffmpegPath)
-
+ffmpeg.setFfmpegPath(ffmpegBasePath)
 
 function percentage(part, total, fixed = 2) {
-    if (typeof part !== "number" && typeof total !== "number") {
-        throw new Error("Parameter is not a number!")
+    if (typeof part !== 'number' && typeof total !== 'number') {
+        throw new Error('Parameter is not a number!')
     }
     return Number(((100 * part) / total).toFixed(fixed))
 }
 
-function convertToWav({audio, onProgress, err = console.log}) {
-
-    const fileName  = path.basename(audio)
-    const filePath  = path.dirname(audio)
-    const extension = path.extname(audio)
+function convertToMp3({ file, onProgress, err = console.log }) {
+    const fileName = path.basename(file)
+    const filePath = path.dirname(file)
+    const extension = path.extname(file)
     const pathToMp3 = `${filePath}/mp3`
 
     if (!fs.existsSync(pathToMp3)) {
         fs.mkdirSync(pathToMp3, '0744')
     }
 
-    const outStream = fs.createWriteStream(`${pathToMp3}/${path.basename(fileName,extension)}.mp3`)
-    const stats = fs.statSync(audio)
-    const ffmpegProcess = ffmpeg(audio)
+    const outStream = fs.createWriteStream(
+        `${pathToMp3}/${path.basename(fileName, extension)}.mp3`
+    )
+    const stats = fs.statSync(file)
+    const ffmpegProcess = new ffmpeg(file)
 
-    ffmpegProcess.toFormat('mp3')
+    ffmpegProcess
+        .toFormat('mp3')
         .on('error', err)
-        .on('progress', (progress) => onProgress(percentage(progress.targetSize * 10000, stats.size)))
+        .on('progress', progress =>
+            onProgress(percentage(progress.targetSize * 10000, stats.size))
+        )
         .on('end', () => onProgress(percentage(stats.size, stats.size)))
         .writeToStream(outStream, { end: true })
 
     return ffmpegProcess
 }
 
-export default convertToWav
+export default convertToMp3
