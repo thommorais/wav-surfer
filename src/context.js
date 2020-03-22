@@ -1,5 +1,5 @@
-import { createContext } from 'react'
+import { createContext } from "react";
 
-const DashboardContext = createContext()
+const DashboardContext = createContext();
 
-export default DashboardContext
+export default DashboardContext;

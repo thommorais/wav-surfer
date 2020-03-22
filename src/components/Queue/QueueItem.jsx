@@ -11,18 +11,19 @@ import convertToMp3 from '../../backend/convertToMp3'
 import saveWaveform from '../../backend/saveWaveform'
 import drawAudio from '../../helpers/waveform'
 
-const convertSongToBuffer = (filePath) => {
-  const songPromise = new Promise((resolve, reject) => {
-    fs.readFile(filePath, (err, data) => {
-      if (err) { reject(err) }
-         resolve(dataurl.convert({ data, mimetype: 'audio/mp3' }))
+const convertSongToBuffer = filePath => {
+    const songPromise = new Promise((resolve, reject) => {
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(dataurl.convert({ data, mimetype: 'audio/mp3' }))
+        })
     })
-  })
-  return songPromise
+    return songPromise
 }
 
-
-function QueueItem({file}) {
+function QueueItem({ file }) {
     const [songObj, setSong] = useState({})
 
     const [fileName] = useState(() => {
@@ -38,33 +39,40 @@ function QueueItem({file}) {
     useEffect(() => {
         const song = files.find(e => e.song === file.song)
         setSong(song)
-    },[file, files])
+    }, [file, files])
 
-
-    const handleProgress = useCallback((value) => {
-        if (progressBar.current) {
-            requestAnimationFrame(() => {
-                const {song} = songObj
-                progressBar.current.style.setProperty('--progress', value / 100)
-                dispatchProgress(actionsQueue.updateProgress({ song, progress: value }))
-                if (value === 100) {
-                    dispatchProgress(actionsQueue.updateStatus({ song, status: 'done' }))
-                    dispatchProgress(actionsQueue.updateQueue())
-                }
-            })
-        }
-    }, [dispatchProgress, songObj])
+    const handleProgress = useCallback(
+        value => {
+            if (progressBar.current) {
+                requestAnimationFrame(() => {
+                    const { song } = songObj
+                    progressBar.current.style.setProperty(
+                        '--progress',
+                        value / 100
+                    )
+                    dispatchProgress(
+                        actionsQueue.updateProgress({ song, progress: value })
+                    )
+                    if (value === 100) {
+                        dispatchProgress(
+                            actionsQueue.updateStatus({ song, status: 'done' })
+                        )
+                        dispatchProgress(actionsQueue.updateQueue())
+                    }
+                })
+            }
+        },
+        [dispatchProgress, songObj]
+    )
 
     useEffect(() => {
-
         function err(error) {
-            console.error(error)
+            console.error({ error })
         }
 
         const { song, status } = songObj
 
         if (status === 'current') {
-
             requestIdleCallback(async () => {
                 const buff = await convertSongToBuffer(song)
                 const wave = await drawAudio(buff)
@@ -72,13 +80,12 @@ function QueueItem({file}) {
             })
 
             requestIdleCallback(() => {
-                convertToMp3(song, handleProgress, err)
+                convertToMp3({ song, onProgress: handleProgress, err })
+                dispatchProgress(
+                    actionsQueue.updateStatus({ song, status: 'processing' })
+                )
             })
-
-            dispatchProgress(actionsQueue.updateStatus({ song, status: 'processing' }))
         }
-
-
     }, [songObj.status, songObj, handleProgress, dispatchProgress])
 
     return (
@@ -88,7 +95,10 @@ function QueueItem({file}) {
                     {fileName.replace(/[\[\]-]+/g, ' ')}
                 </span>
             </div>
-            <div className={`progressbar w-10/12 ${songObj.status}`} ref={progressBar}/>
+            <div
+                className={`progressbar w-10/12 ${songObj.status}`}
+                ref={progressBar}
+            />
         </li>
     )
 }

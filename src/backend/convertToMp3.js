@@ -28,7 +28,7 @@ function percentage(part, total, fixed = 2) {
     return Number(((100 * part) / total).toFixed(fixed))
 }
 
-function convertToWav(audio, onProgress, err = console.log) {
+function convertToWav({audio, onProgress, err = console.log}) {
 
     const fileName  = path.basename(audio)
     const filePath  = path.dirname(audio)

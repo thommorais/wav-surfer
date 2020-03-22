@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
+  "license": "MIT",
+  "main": "public/electron.js",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -18,8 +20,18 @@
     "react-scripts": "3.4.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "tailwindcss": "^1.2.0",
-    "wavesurfer.js": "^3.3.1"
+    "tailwindcss": "^1.2.0"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.0",
+    "@rescripts/cli": "^0.0.14",
+    "@rescripts/rescript-env": "^0.0.12",
+    "autoprefixer": "^9.7.4",
+    "concurrently": "^5.1.0",
+    "electron": "^8.1.1",
+    "electron-builder": "^22.4.1",
+    "postcss-cli": "^7.1.0",
+    "wait-on": "^4.0.1"
   },
   "scripts": {
     "build:css": "postcss src/index.css -o src/build.css",
@@ -28,12 +40,12 @@
     "build": "rescripts build",
     "test": "rescripts test",
     "eject": "react-scripts eject",
-    "electron-dev": "concurrently  \"BROWSER=none yarn start\" \"yarn watch:css\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev": "concurrently  \"BROWSER=none yarn start\" \"yarn watch:css\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
-    "electron-pack": "electron-builder -mw"
+    "release": "np",
+    "dist": "concurrently \"yarn build:css\" \"BROWSER=none yarn build\" \"electron-builder --macos\""
   },
-  "main": "public/electron.js",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -49,32 +61,43 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^2.1.0",
-    "@rescripts/cli": "^0.0.14",
-    "@rescripts/rescript-env": "^0.0.12",
-    "autoprefixer": "^9.7.4",
-    "concurrently": "^5.1.0",
-    "electron": "^8.1.1",
-    "electron-builder": "^22.4.1",
-    "postcss-cli": "^7.1.0",
-    "wait-on": "^4.0.1"
-  },
   "author": {
     "name": "Fuerza Studio",
     "email": "contact@fuerzastudio.com",
     "url": "https://fuerzastudio.com"
   },
+  "np": {
+    "publish": false,
+    "releaseDraft": false
+  },
   "build": {
     "appId": "com.fuerzastudio.wav-surfer",
-    "productName": ".wav surfer",
+    "productName": "wav-surfer",
     "copyright": "Copyright © 2020 ${author}",
+    "extends": null,
     "mac": {
       "category": "public.app-category.utilities",
-      "icon": "./assets/1024.icns"
+      "icon": "./public/icons/icon.icns",
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "iconSize": 160,
+      "contents": [
+        {
+          "x": 180,
+          "y": 170
+        },
+        {
+          "x": 480,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     },
     "files": [
       "build/**/*",
+      "public/electron.js",
       "node_modules/**/*"
     ],
     "directories": {

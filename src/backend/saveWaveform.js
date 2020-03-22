@@ -1,5 +1,16 @@
 import fs from 'fs'
 import path from 'path'
+import dataurl from 'dataurl'
+
+export function convertSongToBuffer(filePath){
+  const songPromise = new Promise((resolve, reject) => {
+    fs.readFile(filePath, (err, data) => {
+      if (err) { reject(err) }
+         resolve(dataurl.convert({ data, mimetype: 'audio/mp3' }))
+    })
+  })
+  return songPromise
+}
 
 function saveWaveform(dirFilePath, content) {
 
