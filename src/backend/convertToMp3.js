@@ -1,14 +1,9 @@
 import ffmpeg from 'fluent-ffmpeg'
 import fs from 'fs'
 import path from 'path'
-import isDev from 'electron-is-dev'
+import { remote } from 'electron'
 
-import ffmpegPath from '@ffmpeg-installer/ffmpeg'
-
-const ffmpegBasePath = isDev
-    ? './node_modules/ffmpeg-static/ffmpeg'
-    : ffmpegPath.path
-
+const ffmpegBasePath = remote.getGlobal('ffmpegpath')
 // Setting ffmpeg path to ffmpeg binary for osx so that ffmpeg can be packaged with the app.
 ffmpeg.setFfmpegPath(ffmpegBasePath)
 

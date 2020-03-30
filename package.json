@@ -6,13 +6,13 @@
   "license": "MIT",
   "main": "electron/electron.js",
   "dependencies": {
-    "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "dataurl": "^0.1.0",
     "electron-is-dev": "^1.1.0",
     "ffmpeg-static": "^4.0.1",
+    "ffmpeg-static-electron": "^2.0.1",
     "fluent-ffmpeg": "^2.1.2",
     "node-bufferstream": "^0.1.1",
     "node-sass": "^4.13.1",
@@ -78,6 +78,9 @@
     "productName": "wav-surfer",
     "copyright": "Copyright © 2020 ${author}",
     "extends": null,
+    "asarUnpack": [
+      "**/app/node_modules/ffmpeg-static/*"
+    ],
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "./public/icons/icon.icns",

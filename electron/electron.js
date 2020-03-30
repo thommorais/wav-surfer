@@ -1,6 +1,9 @@
 const electron = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
+const ffmpegStatic = require('ffmpeg-static')
+
+global.ffmpegpath = ffmpegStatic.replace('app.asar', 'app.asar.unpacked')
 
 const isDev = require('electron-is-dev')
 
