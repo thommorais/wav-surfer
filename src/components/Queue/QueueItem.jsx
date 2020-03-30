@@ -34,7 +34,7 @@ function QueueItem({ file }) {
 
     const progressBar = useRef(null)
     const files = useSelector(state => state.queue)
-    const dispatchProgress = useDispatch()
+    const dspchProgress = useDispatch()
 
     useEffect(() => {
         const song = files.find(e => e.song === file.song)
@@ -50,19 +50,19 @@ function QueueItem({ file }) {
                         '--progress',
                         value / 100
                     )
-                    dispatchProgress(
+                    dspchProgress(
                         actionsQueue.updateProgress({ song, progress: value })
                     )
                     if (value === 100) {
-                        dispatchProgress(
+                        dspchProgress(
                             actionsQueue.updateStatus({ song, status: 'done' })
                         )
-                        dispatchProgress(actionsQueue.updateQueue())
+                        dspchProgress(actionsQueue.updateQueue())
                     }
                 })
             }
         },
-        [dispatchProgress, songObj]
+        [dspchProgress, songObj]
     )
 
     useEffect(() => {
@@ -81,12 +81,12 @@ function QueueItem({ file }) {
 
             requestIdleCallback(() => {
                 convertToMp3({ file: song, onProgress: handleProgress, err })
-                dispatchProgress(
+                dspchProgress(
                     actionsQueue.updateStatus({ song, status: 'processing' })
                 )
             })
         }
-    }, [songObj.status, songObj, handleProgress, dispatchProgress])
+    }, [songObj.status, songObj, handleProgress, dspchProgress])
 
     return (
         <li className="px-12 relative py-3 text-sm leading-5">

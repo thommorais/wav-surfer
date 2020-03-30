@@ -1,8 +1,13 @@
 import ffmpeg from 'fluent-ffmpeg'
 import fs from 'fs'
 import path from 'path'
+import isDev from 'electron-is-dev'
 
-const ffmpegBasePath = './node_modules/ffmpeg-static/ffmpeg'
+import ffmpegPath from '@ffmpeg-installer/ffmpeg'
+
+const ffmpegBasePath = isDev
+    ? './node_modules/ffmpeg-static/ffmpeg'
+    : ffmpegPath.path
 
 // Setting ffmpeg path to ffmpeg binary for osx so that ffmpeg can be packaged with the app.
 ffmpeg.setFfmpegPath(ffmpegBasePath)
