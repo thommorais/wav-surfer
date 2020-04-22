@@ -1,113 +1,84 @@
 {
   "name": "wav-surfer",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "./",
-  "license": "MIT",
-  "main": "electron/electron.js",
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "dataurl": "^0.1.0",
-    "electron-is-dev": "^1.1.0",
-    "ffmpeg-static": "^4.0.1",
-    "ffmpeg-static-electron": "^2.0.1",
-    "fluent-ffmpeg": "^2.1.2",
-    "node-bufferstream": "^0.1.1",
-    "node-sass": "^4.13.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-redux": "^7.2.0",
-    "react-scripts": "3.4.0",
-    "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.8",
-    "tailwindcss": "^1.2.0"
-  },
-  "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^2.1.0",
-    "@rescripts/cli": "^0.0.14",
-    "@rescripts/rescript-env": "^0.0.12",
-    "autoprefixer": "^9.7.4",
-    "concurrently": "^5.1.0",
-    "electron": "^8.1.1",
-    "electron-builder": "^22.4.1",
-    "postcss-cli": "^7.1.0",
-    "wait-on": "^4.0.1"
-  },
-  "scripts": {
-    "build:css": "postcss src/index.css -o src/build.css",
-    "watch:css": "postcss src/index.css -o src/build.css -w",
-    "start": "rescripts start",
-    "build": "rescripts build",
-    "test": "rescripts test",
-    "eject": "react-scripts eject",
-    "dev": "concurrently  \"BROWSER=none yarn start\" \"yarn watch:css\" \"wait-on http://localhost:3000 && electron .\"",
-    "postinstall": "electron-builder install-app-deps",
-    "preelectron-pack": "yarn build",
-    "release": "np",
-    "dist": "concurrently \"yarn build:css\" \"BROWSER=none yarn build\" \"electron-builder --macos\"",
-    "build-e": "electron-builder --macos"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "productName": "wav-surfer",
+  "version": "0.0.2",
+  "main": "src/index.js",
+  "description": "app to musicmatter.com.br",
   "author": {
     "name": "Fuerza Studio",
     "email": "contact@fuerzastudio.com",
     "url": "https://fuerzastudio.com"
   },
-  "np": {
-    "publish": false,
-    "releaseDraft": false
+  "scripts": {
+    "start": "concurrently \"electron-forge start\" \"npm:svelte-dev\"",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "make-w": "electron-forge make --platform=win32 --arch=x64",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\"",
+    "svelte-build": "rollup -c",
+    "svelte-dev": "rollup -c -w",
+    "svelte-start": "sirv public"
   },
-  "build": {
-    "appId": "com.fuerzastudio.wav-surfer",
-    "productName": "wav-surfer",
-    "copyright": "Copyright © 2020 ${author}",
-    "extends": null,
-    "asarUnpack": [
-      "**/app/node_modules/ffmpeg-static/*"
-    ],
-    "mac": {
-      "category": "public.app-category.utilities",
-      "icon": "./public/icons/icon.icns",
-      "darkModeSupport": true
-    },
-    "dmg": {
-      "iconSize": 160,
-      "contents": [
+  "keywords": [],
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "icon": "./public/icons/icon.icns"
+      },
+      "makers": [
         {
-          "x": 180,
-          "y": 170
+          "name": "@electron-forge/maker-squirrel",
+          "platforms": [
+            "win32"
+          ],
+          "config": {
+            "noMsi": true,
+            "name": "wav-surfer",
+            "certificateFile": "./cert.pfx",
+            "certificatePassword": "04290429"
+          }
         },
         {
-          "x": 480,
-          "y": 170,
-          "type": "link",
-          "path": "/Applications"
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
         }
       ]
-    },
-    "files": [
-      "build/**/*",
-      "electron/electron.js",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "buildResources": "assets"
     }
+  },
+  "dependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.2",
+    "dataurl": "^0.1.0",
+    "electron-is-dev": "^1.2.0",
+    "electron-reload": "^1.5.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "ffmpeg-static": "^4.1.1",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs": "^0.0.1-security",
+    "postcss": "^7.0.27",
+    "postcss-load-config": "^2.1.0",
+    "sirv-cli": "^0.4.4",
+    "svelte-preprocess": "^3.7.1",
+    "tailwindcss": "^1.3.3"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.50",
+    "@electron-forge/maker-deb": "^6.0.0-beta.50",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.50",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.50",
+    "@electron-forge/maker-zip": "^6.0.0-beta.50",
+    "@rollup/plugin-commonjs": "^11.0.0",
+    "@rollup/plugin-node-resolve": "^7.0.0",
+    "concurrently": "^5.1.0",
+    "electron": "8.0.2",
+    "rollup": "^1.32.0",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^5.1.2",
+    "svelte": "^3.19.1"
   }
 }

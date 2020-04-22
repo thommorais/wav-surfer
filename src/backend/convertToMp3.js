@@ -1,7 +1,7 @@
-import ffmpeg from 'fluent-ffmpeg'
-import fs from 'fs'
-import path from 'path'
-import { remote } from 'electron'
+const fs = window.require('fs')
+const path = window.require('path')
+const ffmpeg = window.require('fluent-ffmpeg')
+const { remote } = window.require('electron')
 
 const ffmpegBasePath = remote.getGlobal('ffmpegpath')
 // Setting ffmpeg path to ffmpeg binary for osx so that ffmpeg can be packaged with the app.
@@ -33,7 +33,7 @@ function convertToMp3({ file, onProgress, err = console.log }) {
     ffmpegProcess
         .toFormat('mp3')
         .on('error', err)
-        .on('progress', progress =>
+        .on('progress', (progress) =>
             onProgress(percentage(progress.targetSize * 10000, stats.size))
         )
         .on('end', () => onProgress(percentage(stats.size, stats.size)))
