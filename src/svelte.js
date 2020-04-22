@@ -1,10 +1,3 @@
 import App from './App.svelte'
 
-const app = new App({
-	target: document.body,
-	props: {
-		name: 'thom'
-	}
-})
-
-export default app
+export default new App({ target: document.body })

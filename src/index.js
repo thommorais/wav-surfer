@@ -1,7 +1,8 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const isDev = require('electron-is-dev')
 const ffmpegStatic = require('ffmpeg-static')
+const fs = require("fs")
 
 global.ffmpegpath = ffmpegStatic.replace('app.asar', 'app.asar.unpacked')
 
@@ -17,9 +18,11 @@ if (require('electron-squirrel-startup')) {
   app.quit()
 }
 
+app.allowRendererProcessReuse = true
+
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  let mainWindow = new BrowserWindow({
         title: app.name,
         show: false,
         width: 480,
@@ -28,8 +31,8 @@ const createWindow = () => {
         transparent: true,
         titleBarStyle: 'hidden',
         webPreferences: {
-            nodeIntegration: true,
-            webSecurity: false,
+          nodeIntegration: true,
+          webSecurity: false,
         },
     })
 
@@ -41,9 +44,8 @@ const createWindow = () => {
       mainWindow.webContents.openDevTools()
   }
 
-
   mainWindow.on('closed', () => (mainWindow = null))
-  mainWindow.on('ready-to-show', () => mainWindow.show())
+  mainWindow.on('ready-to-show', () => mainWindow.show() )
 
 }
 
@@ -68,8 +70,5 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-app.allowRendererProcessReuse = true
-
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

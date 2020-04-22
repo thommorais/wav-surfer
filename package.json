@@ -1,13 +1,19 @@
 {
-  "name": "svelte-electron-forge",
-  "productName": "svelte-electron-forge",
-  "version": "1.0.0",
-  "description": "Svelte + Electron Forge",
+  "name": "wav-surfer",
+  "productName": "wav-surfer",
+  "version": "0.0.2",
   "main": "src/index.js",
+  "description": "app to musicmatter.com.br",
+  "author": {
+    "name": "Fuerza Studio",
+    "email": "contact@fuerzastudio.com",
+    "url": "https://fuerzastudio.com"
+  },
   "scripts": {
-    "start": "concurrently \"npm:svelte-dev\" \"electron-forge start\"",
+    "start": "concurrently \"electron-forge start\" \"npm:svelte-dev\"",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make-w": "electron-forge make --platform=win32 --arch=x64",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "svelte-build": "rollup -c",
@@ -15,40 +21,44 @@
     "svelte-start": "sirv public"
   },
   "keywords": [],
-  "author": "jeffd23",
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "./public/icons/icon.icns"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
+          "platforms": [
+            "win32"
+          ],
           "config": {
-            "name": "crawler"
+            "noMsi": true,
+            "name": "wav-surfer",
+            "certificateFile": "./cert.pfx",
+            "certificatePassword": "04290429"
           }
         },
         {
           "name": "@electron-forge/maker-zip",
           "platforms": [
-            "darwin"
+            "darwin",
+            "linux"
           ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ]
     }
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.2",
+    "dataurl": "^0.1.0",
     "electron-is-dev": "^1.2.0",
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
+    "ffmpeg-static": "^4.1.1",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs": "^0.0.1-security",
     "postcss": "^7.0.27",
     "postcss-load-config": "^2.1.0",
     "sirv-cli": "^0.4.4",
