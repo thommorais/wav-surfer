@@ -17,6 +17,12 @@
             }
             return item
         }))
+
+        queue.update(state => {
+            const firstItem = state[0]
+            firstItem.status = 'current'
+            return [firstItem, ...state]
+        })
     }
 
     function clearQueue(){
